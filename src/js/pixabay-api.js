@@ -1,46 +1,24 @@
-'use strict';
 import axios from 'axios';
-import iziToast from 'izitoast';
 
-import closeImageURL from '../img/close.png';
+const api = axios.create({
+  baseURL: 'https://pixabay.com',
+});
 
-let userSymbol;
-axios.defaults.baseURL = 'https://pixabay.com';
+const END_POINT = '/api/';
 
-export async function getImages(userSymbol, currentPage) {
-  try {
-    const responce = await axios.get('/api/', {
-      params: {
-        q: userSymbol,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        page: currentPage,
-        per_page: 15,
-        safesearch: 'true',
-        key: '44587704-58c585ec777ca11520d849bef',
-      },
-    });
-    if (responce.data.hits.length === 0) {
-      showError(
-        'Sorry, there are no images matching your search query. Please try again!'
-      );
-    }
-    return responce.data;
-  } catch (error) {
-    showError(
-      'Sorry, there was an error fetching images. Please try again later!'
-    );
-  }
-  throw Error;
-}
-export function showError(message) {
-  iziToast.error({
-    message,
-    maxWidth: '322px',
-    iconUrl: closeImageURL,
-    backgroundColor: '#EF4040',
-    messageColor: '#fff',
-    titleColor: '#fff',
-    theme: 'dark',
-  });
+export async function getPhotos(query, page) {
+  query = query.toLowerCase().split(' ').join('+').toString();
+
+  const params = {
+    key: '44587704-58c585ec777ca11520d849bef',
+    q: query,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: 'true',
+    page: page,
+    per_page: 15,
+  };
+
+  const result = await api.get(END_POINT, { params });
+  return result.data;
 }

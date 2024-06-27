@@ -17,7 +17,7 @@ export async function getImages(userSymbol, currentPage) {
         page: currentPage,
         per_page: 15,
         safesearch: 'true',
-        key: '44388717-c7f861c042cec84afe94caebd',
+        key: '44587704-58c585ec777ca11520d849bef',
       },
     });
     if (responce.data.hits.length === 0) {
